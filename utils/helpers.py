@@ -3,6 +3,7 @@ import numpy as np
 def format_date(date):
     return date.strftime('%d %b %Y')
 
+# Function to safely convert numpy types to Python types
 def safe_convert(value):
     if isinstance(value, np.integer):
         return int(value)

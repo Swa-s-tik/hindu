@@ -48,4 +48,4 @@ def create_footer():
         </div>
     </div>
     """
-    st.markdown(footer_html, unsafe_allow_html=True)
+    return footer_html

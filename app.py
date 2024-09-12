@@ -3,6 +3,8 @@ import streamlit as st
 from components import layout
 from ml.data_processing import load_data
 from pages import home, about
+from PIL import Image
+from utils import helpers
 
 # Set page configuration
 st.set_page_config(
@@ -12,8 +14,12 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+# Load the CSS file
+helpers.load_css('styles\main.css')
+
 # Load and display the logo
-#logo = Image.open(r"C:\Users\Swastik\Desktop\hindu\hindumisia-dark-bg-logo.png")
+logo = Image.open(r"images\hindumisia-dark-bg-logo.jpg")
+
 
 # Create the top banner with logo and title
 st.markdown("""
@@ -23,7 +29,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Display the logo image
-st.image(r"C:\Users\Swastik\Desktop\hindu\hindumisia-dark-bg-logo.png", width=150, use_column_width=False)
+st.image(logo, width=150, use_column_width=False)
 
 # Add custom CSS to position the logo
 st.markdown("""
@@ -37,6 +43,22 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+</style>
+""", unsafe_allow_html=True)
 
 def main():
     # Get the current page from the URL parameter
