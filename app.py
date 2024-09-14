@@ -1,6 +1,6 @@
 # app.py
 import streamlit as st
-from components import layout
+from components.layout import create_footer
 from ml.data_processing import load_data
 from pages import home, about
 from PIL import Image
@@ -14,8 +14,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+helpers.load_html(r'styles\app_struct.html')
+
 # Load the CSS file
-helpers.load_css('styles\main.css')
+helpers.load_css(r'styles\main.css')
 
 # Load and display the logo
 logo = Image.open(r"images\hindumisia-dark-bg-logo.jpg")
@@ -31,34 +33,6 @@ st.markdown("""
 # Display the logo image
 st.image(logo, width=150, use_column_width=False)
 
-# Add custom CSS to position the logo
-st.markdown("""
-    <style>
-    img {
-        position: relative;
-        z-index: 1100;
-        left: 0px
-        top: 0px;
-        transform: translate(-25px, -135px);
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-    [data-testid="collapsedControl"] {
-        display: none
-    }
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-</style>
-""", unsafe_allow_html=True)
 
 def main():
     # Get the current page from the URL parameter
@@ -85,7 +59,7 @@ def main():
         module = __import__(f"pages.{page}", fromlist=["run_page"])
         module.run_page()
     
-    layout.create_footer()
+    st.markdown(create_footer(), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()

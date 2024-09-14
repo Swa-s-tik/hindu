@@ -1,5 +1,7 @@
 # utils/helpers.py
 import numpy as np
+import streamlit as st
+
 def format_date(date):
     return date.strftime('%d %b %Y')
 
@@ -18,3 +20,13 @@ def get_headlines(df, date):
 
 def format_date_range(start_date, end_date):
     return f"{format_date(start_date)} and {format_date(end_date)}".replace('-', 'and')
+
+# Load external CSS
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+def load_html(file_name):
+    with open(file_name, "r") as f:
+        app_structure = f.read()
+    st.markdown(app_structure, unsafe_allow_html=True)

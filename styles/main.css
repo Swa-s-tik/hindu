@@ -24,11 +24,22 @@
 }
 
 .selection-title {
-    color: black;
+    font-size: 16px;
     font-weight: bold;
-    font-size: inherit;
-    margin-bottom: 0;
-    line-height: 1.3;
+}
+
+/* Light theme (default) */
+@media (prefers-color-scheme: light) {
+    .selection-title {
+        color: black;
+    }
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+    .selection-title {
+        color: white;
+    }
 }
 
 .stRadio > div, .stSelectbox > div, .stDateInput > div {
@@ -338,4 +349,16 @@ a:hover {
         overflow-x: auto;
         display: block;
     }
+}
+
+img {
+    position: relative;
+    z-index: 1100;
+    left: 0px;
+    top: 0px;
+    transform: translate(-25px, -135px);
+}
+
+[data-testid="collapsedControl"] {
+    display: none
 }

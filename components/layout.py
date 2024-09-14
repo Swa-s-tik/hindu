@@ -17,19 +17,19 @@ def create_footer():
     <div class="footer">
         <div class="footer-content">
             <div class="footer-column">
-                <a href="/?page=home"target="_self">Home</a>
-                <a href="/?page=about"target="_self">About Hindumisia.ai</a>
-                <a href="/?page=benefits"target="_self">Benefits</a>
+                <a href="/" target="_self">Home</a>
+                <a href="/about" target="_self">About Hindumisia.ai</a>
+                <a href="/benefits" target="_self">Benefits</a>
             </div>
             <div class="footer-column">
-                <a href="/?page=anti_hindu_hate"target="_self">Anti-Hindu Hate</a>
-                <a href="/?page=media_references"target="_self">Media References</a>
-                <a href="/?page=partners"target="_self">Partners</a>
+                <a href="/anti_hindu_hate" target="_self">Anti-Hindu Hate</a>
+                <a href="/media_references" target="_self">Media References</a>
+                <a href="/partners" target="_self">Partners</a>
             </div>
             <div class="footer-column">
-                <a href="/?page=privacy"target="_self">Privacy</a>
-                <a href="/?page=ethics"target="_self">Ethics</a>
-                <a href="/?page=contacts"target="_self">Contacts</a>
+                <a href="/privacy" target="_self">Privacy</a>
+                <a href="/ethics" target="_self">Ethics</a>
+                <a href="/contacts" target="_self">Contacts</a>
             </div>
             <div class="footer-column">
                 <span>Connect with us</span>

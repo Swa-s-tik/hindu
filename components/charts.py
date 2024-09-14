@@ -62,6 +62,11 @@ def create_stacked_portal_chart(df, date_range):
 def create_stacked_sentiment_graph(df, date_range):
     portal_sentiment = df.groupby('portal')['sentiment_label'].value_counts(normalize=True).unstack(fill_value=0)
     portal_sentiment = portal_sentiment.sort_values('Negative', ascending=False)
+    # Check if 'Negative' column exists before sorting
+    if 'Negative' in portal_sentiment.columns:
+        portal_sentiment = portal_sentiment.sort_values('Negative', ascending=False)
+    else:
+        portal_sentiment = portal_sentiment.sort_index(ascending=True)  # Sort by index if 'Negative' doesn't exist
     
     fig = go.Figure()
     
@@ -92,7 +97,8 @@ def create_stacked_sentiment_graph(df, date_range):
     return fig
 
 def create_sentiment_trend(df, date_range):
-    df['date'] = df['published_date'].dt.date
+    df = df.copy()  # Ensure df is a copy
+    df.loc[:, 'date'] = df['published_date'].dt.date
     sentiment_over_time = df.groupby(['date', 'sentiment_label']).size().unstack(fill_value=0).reset_index()
     
     fig = go.Figure()

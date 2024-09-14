@@ -28,7 +28,9 @@ def run_page():
 def main_dashboard(df):
     # Get the minimum and maximum dates from the DataFrame
     min_date = df['published_date'].min().date()
-    max_date = df['published_date'].max().date()
+    # max_date = df['published_date'].max().date()
+    max_date = df[df['published_date'] <= pd.Timestamp('today') - pd.Timedelta(days=1)]['published_date'].max().date()
+
 
     # Date and portal selection in the same row
     col1, col2 = st.columns(2)
@@ -36,9 +38,9 @@ def main_dashboard(df):
         st.markdown('<p class="selection-title">Select a Date</p>', unsafe_allow_html=True)
         selected_date = st.date_input("Select a Date", min_value=min_date, max_value=max_date, value=max_date, format="DD/MM/YYYY", label_visibility="collapsed")
     with col2:
-        st.markdown('<p class="selection-title">Select portal</p>', unsafe_allow_html=True)
+        st.markdown('<p class="selection-title">Select Portal</p>', unsafe_allow_html=True)
         portals = ['All'] + sorted(df['portal'].unique().tolist())
-        selected_portal = st.selectbox("Select portal", portals, label_visibility="collapsed")
+        selected_portal = st.selectbox("Select Portal", portals, label_visibility="collapsed")
 
     if selected_portal != 'All':
         df = df[df['portal'] == selected_portal]
@@ -153,7 +155,8 @@ def main_dashboard(df):
 def monthly_dashboard(df):
     # Get the minimum and maximum dates from the DataFrame
     min_date = df['published_date'].min().date()
-    max_date = df['published_date'].max().date()
+    # max_date = df['published_date'].max().date()
+    max_date = df[df['published_date'] <= pd.Timestamp('today') - pd.Timedelta(days=1)]['published_date'].max().date()
 
     col1, col2 = st.columns(2)
     with col1:
@@ -163,10 +166,10 @@ def monthly_dashboard(df):
         selected_month_year = st.selectbox("Select Month", month_year_options, index=month_year_options.index(default_month), key="select_month_year_monthly", label_visibility="collapsed")
 
     with col2:
-        st.markdown('<p class="selection-title">Select portal</p>', unsafe_allow_html=True)
+        st.markdown('<p class="selection-title">Select Portal</p>', unsafe_allow_html=True)
         portals = ['All'] + sorted(df['portal'].unique().tolist())
-        selected_portal = st.selectbox("Select portal", portals, key="portal_selector_monthly", label_visibility="collapsed")
-    
+        selected_portal = st.selectbox("Select Portal", portals, key="portal_selector_monthly", label_visibility="collapsed")
+     
     if selected_portal != 'All':
         df = df[df['portal'] == selected_portal]
 
@@ -279,9 +282,9 @@ def range_dashboard(df):
         st.markdown('<p class="selection-title">End Date</p>', unsafe_allow_html=True)
         end_date = st.date_input("End Date", value=None, min_value=df['published_date'].min().date(), max_value=df['published_date'].max().date(), format="DD/MM/YYYY", key="end_date", label_visibility="collapsed")
     with col3:
-        st.markdown('<p class="selection-title">Select portal</p>', unsafe_allow_html=True)
+        st.markdown('<p class="selection-title">Select Portal</p>', unsafe_allow_html=True)
         portals = ['All'] + sorted(df['portal'].unique().tolist())
-        selected_portal = st.selectbox("Select portal", portals, key="portal_selector_range", label_visibility="collapsed")
+        selected_portal = st.selectbox("Select Portal", portals, key="portal_selector_range", label_visibility="collapsed")
     
     if selected_portal != 'All':
         df = df[df['portal'] == selected_portal]
