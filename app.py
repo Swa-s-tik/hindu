@@ -6,18 +6,18 @@ from pages import home, about
 from PIL import Image
 from utils import helpers
 
-# Google Analytics Tracking ID
-st.markdown(f"""
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G7S9PRKZ6F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){{dataLayer.push(arguments);}}
-  gtag('js', new Date());
+# # Google Analytics Tracking ID
+# st.markdown(f"""
+# <!-- Google tag (gtag.js) -->
+# <script async src="https://www.googletagmanager.com/gtag/js?id=G-G7S9PRKZ6F"></script>
+# <script>
+#   window.dataLayer = window.dataLayer || [];
+#   function gtag(){{dataLayer.push(arguments);}}
+#   gtag('js', new Date());
 
-  gtag('config', 'G-G7S9PRKZ6F');
-</script>
-""", unsafe_allow_html=True)
+#   gtag('config', 'G-G7S9PRKZ6F');
+# </script>
+# """, unsafe_allow_html=True)
 
 # Set page configuration
 st.set_page_config(

@@ -1,5 +1,7 @@
 # components/charts.py
-import plotly.graph_objects as go
+import pandas as pd
+import plotly.graph_objs as go
+from datetime import date, timedelta
 
 def create_chart_title(base_title, date_range):
     return f'{base_title} {date_range}'.replace(' - ', ' and ')
@@ -98,8 +100,42 @@ def create_stacked_sentiment_graph(df, date_range):
 
 def create_sentiment_trend(df, date_range):
     df = df.copy()  # Ensure df is a copy
-    df.loc[:, 'date'] = df['published_date'].dt.date
+    df.loc[:, 'date'] = pd.to_datetime(df['published_date']).dt.date
+    
+    if isinstance(date_range, str):
+        # Extract month and year from the string
+        date_str = date_range.replace("for ", "")  # Remove "for " if present
+        try:
+            month_date = pd.to_datetime(date_str, format="%B %Y")
+        except ValueError:
+            # If %B (full month name) fails, try with %b (abbreviated month name)
+            month_date = pd.to_datetime(date_str, format="%b %Y")
+        start_date = month_date.replace(day=1)
+        end_date = (start_date + pd.offsets.MonthEnd(1)).date()
+    
+    # Convert to datetime.date if they're pandas Timestamps
+    start_date = start_date.date() if isinstance(start_date, pd.Timestamp) else start_date
+    end_date = end_date.date() if isinstance(end_date, pd.Timestamp) else end_date
+    
+    # Create a complete date range including future dates of the current month
+    today = date.today()
+    if end_date.month == today.month and end_date.year == today.year:
+        end_of_month = (today.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+        complete_date_range = pd.date_range(start=start_date, end=end_of_month)
+    else:
+        complete_date_range = pd.date_range(start=start_date, end=end_date)
+    
+    # Create a DataFrame with all dates
+    date_df = pd.DataFrame({'date': complete_date_range.date})
+    
+    # Group by date and sentiment, then merge with the complete date range
     sentiment_over_time = df.groupby(['date', 'sentiment_label']).size().unstack(fill_value=0).reset_index()
+    
+    # Ensure both DataFrames have the same date type
+    date_df['date'] = pd.to_datetime(date_df['date']).dt.date
+    sentiment_over_time['date'] = pd.to_datetime(sentiment_over_time['date']).dt.date
+    
+    sentiment_over_time = pd.merge(date_df, sentiment_over_time, on='date', how='left').fillna(0)
     
     fig = go.Figure()
     
@@ -113,7 +149,7 @@ def create_sentiment_trend(df, date_range):
                 line=dict(color=color)
             ))
     
-    title = create_chart_title('Trends', date_range)
+    title = f"Sentiment Trends for {start_date.strftime('%B %Y')}"
     fig.update_layout(
         title=title,
         xaxis=dict(
