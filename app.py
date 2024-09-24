@@ -1,23 +1,11 @@
 # app.py
 import streamlit as st
+import streamlit.components.v1 as components
 from components.layout import create_footer
 from ml.data_processing import load_data
 from pages import home, about
 from PIL import Image
 from utils import helpers
-
-# # Google Analytics Tracking ID
-# st.markdown(f"""
-# <!-- Google tag (gtag.js) -->
-# <script async src="https://www.googletagmanager.com/gtag/js?id=G-G7S9PRKZ6F"></script>
-# <script>
-#   window.dataLayer = window.dataLayer || [];
-#   function gtag(){{dataLayer.push(arguments);}}
-#   gtag('js', new Date());
-
-#   gtag('config', 'G-G7S9PRKZ6F');
-# </script>
-# """, unsafe_allow_html=True)
 
 # Set page configuration
 st.set_page_config(
@@ -26,6 +14,20 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+# Google Tag Manager script
+GTM_code = """
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NSM7Q9H8');</script>
+<!-- End Google Tag Manager -->
+"""
+
+# Render the Google Tag Manager in the app
+components.html(GTM_code, height=0)
 
 helpers.load_html(r'styles\app_struct.html')
 
