@@ -1,7 +1,7 @@
 # components/charts.py
 import pandas as pd
 import plotly.graph_objs as go
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 def create_chart_title(base_title, date_range):
     return f'{base_title} {date_range}'.replace(' - ', ' and ')
@@ -103,19 +103,25 @@ def create_sentiment_trend(df, date_range):
     df.loc[:, 'date'] = pd.to_datetime(df['published_date']).dt.date
     
     if isinstance(date_range, str):
-        # Extract month and year from the string
-        date_str = date_range.replace("for ", "")  # Remove "for " if present
-        try:
-            month_date = pd.to_datetime(date_str, format="%B %Y")
-        except ValueError:
-            # If %B (full month name) fails, try with %b (abbreviated month name)
-            month_date = pd.to_datetime(date_str, format="%b %Y")
-        start_date = month_date.replace(day=1)
-        end_date = (start_date + pd.offsets.MonthEnd(1)).date()
-    
-    # Convert to datetime.date if they're pandas Timestamps
-    start_date = start_date.date() if isinstance(start_date, pd.Timestamp) else start_date
-    end_date = end_date.date() if isinstance(end_date, pd.Timestamp) else end_date
+        if "between" in date_range:
+            # Handle date range input
+            date_str = date_range.replace("between ", "")
+            start_date_str, end_date_str = date_str.split(" - ")
+            start_date = pd.to_datetime(start_date_str, format="%d %b %Y").date()
+            end_date = pd.to_datetime(end_date_str, format="%d %b %Y").date()
+        else:
+            # Handle single month input
+            date_str = date_range.replace("for ", "")  # Remove "for " if present
+            try:
+                month_date = pd.to_datetime(date_str, format="%B %Y")
+            except ValueError:
+                # If %B (full month name) fails, try with %b (abbreviated month name)
+                month_date = pd.to_datetime(date_str, format="%b %Y")
+            start_date = month_date.replace(day=1).date()
+            end_date = (start_date + pd.offsets.MonthEnd(1)).date()
+    else:
+        # Assume start_date and end_date are already datetime.date objects
+        start_date, end_date = date_range
     
     # Create a complete date range including future dates of the current month
     today = date.today()
@@ -149,7 +155,11 @@ def create_sentiment_trend(df, date_range):
                 line=dict(color=color)
             ))
     
-    title = f"Sentiment Trends for {start_date.strftime('%B %Y')}"
+    if start_date.month == end_date.month and start_date.year == end_date.year:
+        title = f"Sentiment Trends for {start_date.strftime('%B %Y')}"
+    else:
+        title = f"Sentiment Trends from {start_date.strftime('%d %b %Y')} to {end_date.strftime('%d %b %Y')}"
+    
     fig.update_layout(
         title=title,
         xaxis=dict(
